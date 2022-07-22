@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Tica Tac Toe</title>
+  <link href="style.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+  <div class="match">
+    <div class="playing">
+      <button class="Xgame" >
+        <div class="gamer">X</div>
+        <div class="xGamerNumber">-</div>
+      </button>
+      <button class="Ogame" onclick="ogamer()" >
+        <div class="gamer">O</div>
+        <div class="oGamerNumber">-</div>
+      </button>
+    </div>
+    <div class="table">
+      <div class="box" data-value="0"></div>
+      <div class="box" data-value="1"></div>
+      <div class="box" data-value="2"></div>
+      <div class="box" data-value="3"></div>
+      <div class="box" data-value="4"></div>
+      <div class="box" data-value="5"></div>
+      <div class="box" data-value="6"></div>
+      <div class="box" data-value="7"></div>
+      <div class="box" data-value="8"></div>
+    </div>
+  </div>
+  <div class="winner-massage">
+    <div style="display: flex;">
+      <span class="gamer-winner"></span>
+      <span class="gamer-draw"></span>
+    </div>
+    <span class="gamer-text"></span>
+  </div>
+  
+<script src="script.js" theme="blue" defer></script> 
+</body>
+
+</html>
