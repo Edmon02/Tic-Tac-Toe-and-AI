@@ -8,7 +8,13 @@
   <link href="style.css" rel="stylesheet" type="text/css" />
 </head>
 
-<body>
+<body onload="createTable()">
+  <div class="itemType">
+    <select class="gameType" id="gameType" onchange="update()">
+      <option class="opt" value="Simple" selected>Easy</option>
+      <option class="opt" value="Difficult">Hard</option>
+    </select>
+  </div>
   <div class="match">
     <div class="playing">
       <button class="Xgame" >

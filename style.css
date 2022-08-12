@@ -4,16 +4,34 @@
 
 body{
   margin: 0;
+  background-color: #3a3e59;
 }
 
 .match {
-  height: 100vh;
+  height: 97vh;
   display: grid;
   justify-content: center;
   align-content: center;
   justify-items: center;
   align-items: center;
-  background-color: #3a3e59;
+}
+
+.itemType{
+  display: grid;
+  top: 19vh;
+  right: 75%;
+  position: absolute;
+}
+
+.gameType{
+  cursor: pointer;
+  color: black;
+  display: inline-block;
+  font-weight: bold;
+}
+
+.opt{
+  
 }
 
 .playing {
@@ -62,7 +80,9 @@ body{
   grid-template-columns: repeat(3, auto);
 }
 
-.box{
+.box, 
+.box0, .box1, .box2
+.box3 {
   height: 100px;
   width: 100px;
   border-radius: 8px;
@@ -71,7 +91,7 @@ body{
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #ed6b5b;
+  background-color: #3a3e59;
 }
 
 .x::after {
@@ -92,7 +112,7 @@ body{
     cursor: not-allowed;
 } 
 
- .grid-cell:not(.disabled):hover {
+.grid-cell:not(.disabled):hover {
     background: #eee;
 }
 

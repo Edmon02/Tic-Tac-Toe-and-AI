@@ -21,6 +21,44 @@ const game = {
 let xSum = 0;
 let oSum = 0;
 
+function createTable() {
+    //var tag = document.querySelectorAll(".table")[0]
+    var i = 0;
+    var j = 5;
+    let k = setInterval(() => {
+        if(i <= 2) {
+            const el = document.querySelectorAll('.box')[`${i}`]
+            el.style.backgroundColor = "#ed6b5b";
+        }
+        else if(i > 2 && j > 2) {
+            const el = document.querySelectorAll('.box')[`${j--}`]
+            el.style.backgroundColor = "#ed6b5b";
+        }else {
+            // i++;
+            const el = document.querySelectorAll('.box')[`${i}`]
+            el.style.backgroundColor = "#ed6b5b";
+        }
+        i++;
+        if(i == 9) clearInterval(k);
+    }, 70)
+ }
+
+
+var gType = document.getElementById('gameType');
+var value = gType.options[gType.selectedIndex].text;
+function update() {
+    if(document.querySelectorAll('.gameType:not(.disabled)').length && game.oState.length == 0 && game.xState.length == 0){
+        gType = document.getElementById('gameType');
+        value = gType.options[gType.selectedIndex].text;
+        document.querySelectorAll('.box').forEach(cell => {
+            cell.style.backgroundColor = "#3a3e59";
+        })
+        createTable()
+    }else{
+        reload()
+    }
+}
+
 var opponent = 'x', 
     player = 'o',
     board = [0, 1, 2, 3, 4, 5, 6, 7, 8]
@@ -97,7 +135,7 @@ function findBestMove(board)
                 board[i] = player;
                 let moveVal = minimax(board, 0, false);
                 board[i] = i;
-                if (moveVal > bestVal)
+                if (moveVal >= bestVal)
                 {
                     bestMove.row = i;
                     bestVal = moveVal;
@@ -106,9 +144,9 @@ function findBestMove(board)
     }
     return bestMove;
 }
-var qanak = 0
-function ogamer(){
-    if(qanak == 0){
+var qanak = 0 
+function ogamer() {
+    if(qanak == 0 && game.xState.length == 0) {
         qanak++;
         opponent = 'o'
         player = 'x'
@@ -120,16 +158,62 @@ function ogamer(){
             border-bottom-color: #ed6b5b;;
             box-shadow: 0 4px 5px rgb(0 0 0 / 50%);;
         `;
-        console.log(document.querySelectorAll('.Xgame')[0].style)
-        var bestMove = findBestMove(board)
-        board[bestMove.row] = player;
-        game.xState.push(String(bestMove.row))
-        var aiGamer = document.getElementsByClassName('box')
-        aiGamer[bestMove.row].classList.add('disabled')
-        aiGamer[bestMove.row].classList.add('x')
+
+        if (value !== "Easy") {
+            var bestMove = findBestMove(board)
+            board[bestMove.row] = player;
+            game.xState.push(String(bestMove.row))
+            var aiGamer = document.getElementsByClassName('box')
+            aiGamer[bestMove.row].classList.add('disabled')
+            setTimeout(() => {
+                aiGamer[bestMove.row].classList.add('x')
+            }, 250)
+        }else {
+            var index = Math.floor(Math.random() * 9);
+            board[index] = player;
+            game.xState.push(String(index))
+            var aiGamer = document.getElementsByClassName('box')
+            aiGamer[index].classList.add('disabled')
+            setTimeout(() => {
+                aiGamer[index].classList.add('x')
+            }, 500)
+        }
+
     }
 }
-document.addEventListener('click', event => {
+
+function reload(){
+    document.querySelectorAll('.box')
+    document.querySelectorAll('.winner-massage')[0].style.display = "none";
+    document.querySelectorAll('.match')[0].style.display = "grid";
+    document.querySelectorAll('.itemType')[0].style.display = "grid";
+    document.querySelectorAll('.box').forEach(cell => {
+        cell.style.backgroundColor = "#3a3e59";
+        cell.classList.remove('disabled', 'x', 'o')
+    })
+    document.querySelectorAll('.Xgame')[0].style.cssText = `
+        border-bottom-color: #ed6b5b;
+        box-shadow: 0 4px 5px rgb(0 0 0 / 50%);
+    `;
+    document.querySelectorAll('.Ogame')[0].style.cssText = `
+        border-bottom-color: white;
+        box-shadow: none;
+    `;
+            
+    document.querySelector('.gamer-winner').textContent = ''
+    document.querySelector('.gamer-draw').textContent = ''
+    document.querySelector('.gamer-winner').style.color = '#2f0f0f'
+    qanak = 0;
+    opponent = 'x',
+    player = 'o'
+    board = [0, 1, 2, 3, 4, 5, 6, 7, 8]
+    game.xTurn = true
+    game.xState = []
+    game.oState = []
+    createTable()
+}
+
+document.querySelector('.table').addEventListener('click', event => {
     const target = event.target
     const isCell = target.classList.contains('box')
     const isDisabled = target.classList.contains('disabled')
@@ -140,16 +224,34 @@ document.addEventListener('click', event => {
         target.classList.add('disabled')
         target.classList.add('x')
         
+        if(value !== "Easy") {
 
-        var bestMove = findBestMove(board)
-        if(bestMove.row !== -1){
-            board[bestMove.row] = player;
-            game.oState.push(String(bestMove.row))
-            var aiGamer = document.getElementsByClassName('box')
-            setTimeout(() => {
+            var bestMove = findBestMove(board)
+            if(bestMove.row !== -1){
+                board[bestMove.row] = player;
+                game.oState.push(String(bestMove.row))
+                var aiGamer = document.getElementsByClassName('box')
                 aiGamer[bestMove.row].classList.add('disabled')
-                aiGamer[bestMove.row].classList.add('o')
-            }, 500)
+                setTimeout(() => {
+                    aiGamer[bestMove.row].classList.add('o')
+                }, 500)
+            }
+        }else {
+            var index ;
+            if(game.oState.length != 4) {
+                do { index = String(Math.floor(Math.random() * 9)); }while(
+                    (index == cellValue || 
+                        game.xState.includes(index) ||
+                        game.oState.includes(index))
+                    )
+                board[index] = player;
+                game.oState.push(index)
+                var aiGamer = document.getElementsByClassName('box')
+                aiGamer[index].classList.add('disabled')
+                setTimeout(() => {
+                    aiGamer[index].classList.add('o')
+                }, 500)
+           }
         }
     }
     else if(isCell && !isDisabled) {
@@ -159,21 +261,40 @@ document.addEventListener('click', event => {
         target.classList.add('disabled')
         target.classList.add('o')
         
-        var bestMove = findBestMove(board)
-        if(board[bestMove.row] != 'o'){
-            setTimeout(() => {
-
+        if(value !== "Easy"){
+            var bestMove = findBestMove(board)
+            if(board[bestMove.row] != 'o'){
+                
                 board[bestMove.row] = player;
                 game.xState.push(String(bestMove.row))
                 var aiGamer = document.getElementsByClassName('box')
                 aiGamer[bestMove.row].classList.add('disabled')
-                aiGamer[bestMove.row].classList.add('x')
-            }, 250)
-        }    
+                setTimeout(() => {
+                    aiGamer[bestMove.row].classList.add('x')
+                }, 250)
+            }    
+        }else {
+            var index;
+                do { index = String(Math.floor(Math.random() * 9)); }while(
+                    (index == cellValue || 
+                    game.oState.includes(index) ||
+                    game.xState.includes(index))
+                )
+                board[index] = player;
+                game.xState.push(String(index))
+                var aiGamer = document.getElementsByClassName('box')
+                aiGamer[index].classList.add('disabled')
+                setTimeout(() => {
+                    aiGamer[index].classList.add('x')
+                }, 500)
+            
+        }
     }
     setTimeout(() => {
         if (!document.querySelectorAll('.box:not(.disabled)').length) {
             document.querySelectorAll('.match')[0].style.display = "none";
+            document.querySelectorAll('.itemType')[0].style.display = "none";
+            document.querySelectorAll('.winner-massage')[0].style.display = "grid";
             document.querySelector('.winner-massage').classList.add('visible')
             document.querySelector('.gamer-winner').textContent = 'X'
             document.querySelector('.gamer-draw').textContent = 'O'
@@ -186,7 +307,8 @@ document.addEventListener('click', event => {
             if (xWins || oWins) {
                 document.querySelectorAll('.box').forEach(cell => cell.classList.add('disabled'))
                 document.querySelectorAll('.match')[0].style.display = "none";
-                document.querySelector('.winner-massage').classList.add('visible')
+                document.querySelectorAll('.itemType')[0].style.display = "none";
+                document.querySelectorAll('.winner-massage')[0].style.display = "grid";
                 document.querySelector('.gamer-winner').textContent = xWins ? 'X': 'O';
                 xWins ?
                 document.querySelector('.xGamerNumber').textContent =  ++xSum :
@@ -198,26 +320,7 @@ document.addEventListener('click', event => {
         })
     
         document.querySelector('.winner-massage').addEventListener('click', event => {
-            document.querySelector('.gamer-winner').classList.remove('visible')
-            document.querySelectorAll('.match')[0].style.display = "grid";
-            document.querySelectorAll('.box').forEach(cell => {
-                cell.classList.remove('disabled', 'x', 'o')
-            })
-            document.querySelectorAll('.Xgame')[0].style.cssText = `
-                border-bottom-color: #ed6b5b;;
-                box-shadow: 0 4px 5px rgb(0 0 0 / 50%);
-            `;
-            document.querySelectorAll('.Ogame')[0].style.cssText = `
-                border-bottom-color: white;
-                box-shadow: none;
-            `;
-            qanak = 0;
-            opponent = 'x',
-            player = 'o'
-            board = [0, 1, 2, 3, 4, 5, 6, 7, 8]
-            game.xTurn = true
-            game.xState = []
-            game.oState = []
+            reload()
         });
     }, 450)
 })
