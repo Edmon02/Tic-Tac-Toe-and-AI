@@ -48,6 +48,7 @@ body{
   border-radius: 6px;
   border:1px solid gray;
   border-bottom-color: #ed6b5b;
+  border-bottom: 3.5px solid transparent;
   box-shadow: 0 4px 5px rgb(0 0 0 / 50%);
 }
 
@@ -58,6 +59,7 @@ body{
   background-color: white;
   border-radius: 6px;
   border:1px solid gray;
+  border-bottom: 3.5px solid transparent;
 }
 
 .gamer {
