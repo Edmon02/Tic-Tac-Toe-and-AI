@@ -1,3 +1,2 @@
-# Tic-Tac-Toe-and-AI
+# [Tic-Tac-Toe-and-AI](http://tictactoeandai.epizy.com)
 
-[Tic Tac Toe](http://tictactoeandai.epizy.com)
